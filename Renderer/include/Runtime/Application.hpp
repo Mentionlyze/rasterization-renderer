@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Core/Base.hpp"
 #include "Core/Window.hpp"
 #include <cstdint>

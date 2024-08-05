@@ -1,11 +1,12 @@
 #include <memory>
-#include <utility>
-#define Log()
-#define Assert(x, ...)                                                         \
+
+#define LOG(...)
+#define ASSERT(x, ...)                                                         \
   {                                                                            \
-    if (!(x))                                                                  \
+    if (!(x)) {                                                                \
       LOG(__VA_ARGS__);                                                        \
-    __debgugbreak();                                                           \
+      __debugbreak();                                                          \
+    }                                                                          \
   }
 
 namespace Rasterization {

@@ -2,11 +2,10 @@
 #include <cstdint>
 
 namespace Rasterization {
-void Renderer::Init(const uint32_t width, const uint32_t height) {
-  s_RendererInstance = new CPU_Renderer(width, height);
-}
+RendererInstance *s_RendererInstance = new CPU_Renderer();
+void Renderer::Init(const uint32_t width, const uint32_t height) {}
 
-void Renderer::SetViewport(const uint32_t width, const uint32_t height) {
+inline void Renderer::SetViewport(const uint32_t width, const uint32_t height) {
   s_RendererInstance->SetViewport(width, height);
 }
 
