@@ -1,13 +1,22 @@
 #pragma once
 
-#include "Runtime/Renderer.hpp"
-#include <cstdint>
+#include "Runtime/RendererInstance.hpp"
 
 namespace Rasterization {
 class CPU_Renderer : public RendererInstance {
 public:
-  virtual void Init(const uint32_t width, const uint32_t height) override;
-  virtual void SetViewport(const uint32_t width,
-                           const uint32_t height) override;
+  CPU_Renderer();
+
+  void DrawArrays() {}
+
+  void DrawElements() {}
+
+  void DrawLine() {}
+
+private:
+  void RasterizeTriangle();
+  void DrawTrapezoid();
+  void DrawScanline();
+  void DrawLineWithClip();
 };
 } // namespace Rasterization

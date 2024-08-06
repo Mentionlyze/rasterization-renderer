@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Runtime/Application.hpp"
+#include "Base.hpp"
 #include <algorithm>
 #include <cstdint>
 #include <cstring>
@@ -469,6 +469,7 @@ public:
   static Mat Zeros() {
     Mat mat;
     memset(mat.data, 0, sizeof(mat.data));
+    return mat;
   }
 
   static Mat FromCol(const std::initializer_list<Vec<T, Row>> &initVecs) {
@@ -804,4 +805,9 @@ Vec<T, N> LerpVec(const Vec<T, N> &left, const Vec<T, N> right, U value) {
 
   return result;
 }
+
+inline unsigned char Float2UChar(const float f) {
+  return (unsigned char)(f * 255.0f);
+}
+inline float UChar2Float(const unsigned char c) { return (float)c / 255.0f; }
 } // namespace Rasterization

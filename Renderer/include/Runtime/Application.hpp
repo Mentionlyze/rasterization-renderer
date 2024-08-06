@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Core/Base.hpp"
-#include "Core/Window.hpp"
+#include "LayerStack.hpp"
+#include "Window.hpp"
 #include <cstdint>
 #include <string>
 
@@ -12,8 +12,18 @@ public:
               const uint32_t height);
   ~Application();
 
+  void Run();
+
+  void PushLayer(Layer *layer);
+
 private:
+  std::string m_Title;
+  uint32_t m_Width, m_Height;
+
   Scope<Window> m_Window;
   static Application *s_Instance;
+
+  bool m_Running = true;
+  LayerStack m_LayerStack;
 };
 } // namespace Rasterization

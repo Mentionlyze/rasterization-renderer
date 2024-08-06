@@ -18,3 +18,4 @@ project(
 add_subdirectory(Renderer)
 add_subdirectory(Sandbox)
 
+set_directory_properties(PROPERTY VS_STARTUP_PROJECT Sandbox)
