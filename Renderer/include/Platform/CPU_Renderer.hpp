@@ -7,11 +7,11 @@ class CPU_Renderer : public RendererInstance {
 public:
   CPU_Renderer();
 
-  void DrawArrays() {}
+  void DrawArrays() override;
 
-  void DrawElements() {}
+  void DrawElements() override;
 
-  void DrawLine() {}
+  void DrawLine(const std::vector<Vec2> &points) override;
 
 private:
   void RasterizeTriangle();

@@ -14,6 +14,8 @@ public:
 
   void Run();
 
+  void Terminate();
+
   void PushLayer(Layer *layer);
 
 private:
@@ -23,7 +25,6 @@ private:
   Scope<Window> m_Window;
   static Application *s_Instance;
 
-  bool m_Running = true;
   LayerStack m_LayerStack;
 };
 } // namespace Rasterization

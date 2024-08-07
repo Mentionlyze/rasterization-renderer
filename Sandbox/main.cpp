@@ -12,5 +12,5 @@ int main() {
   app->PushLayer(new Triangle());
 
   app->Run();
-  return 0;
+  delete app;
 }

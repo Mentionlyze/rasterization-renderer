@@ -12,10 +12,12 @@ Application::Application(const std::string &title, const uint32_t width,
   Renderer::Init(width, height);
 }
 
-Application::~Application() {}
+Application::~Application() { Terminate(); }
+
+void Application::Terminate() { m_Window->Terminate(); }
 
 void Application::Run() {
-  while (m_Running) {
+  while (!m_Window->Closed()) {
     m_Window->PollInputEvents();
 
     for (Layer *layer : m_LayerStack) {
