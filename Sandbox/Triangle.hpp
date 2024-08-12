@@ -1,4 +1,4 @@
-#include "Core/Math.hpp"
+#include "Core/Vertex.hpp"
 #include "Runtime/Layer.hpp"
 #include <vector>
 
@@ -9,5 +9,6 @@ public:
   void OnUpdate() override;
 
 private:
-  std::vector<Rasterization::Vec2> points;
+  std::vector<Rasterization::Vertex> m_Vertices;
+  float m_Radius;
 };

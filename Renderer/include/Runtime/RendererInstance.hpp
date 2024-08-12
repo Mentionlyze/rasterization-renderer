@@ -1,8 +1,12 @@
 #pragma once
 
+#include "Core/Camera.hpp"
+#include "Core/Vertex.hpp"
 #include "FrameBuffer.hpp"
 #include <cstdint>
+#include <initializer_list>
 #include <vector>
+
 namespace Rasterization {
 
 struct Viewport {
@@ -30,14 +34,18 @@ public:
   Ref<FrameBuffer> GetFrameBuffer() { return m_FrameBuffer; }
   Viewport GetViewport() { return m_Viewport; }
 
-  virtual void DrawArrays() {}
+  virtual void DrawArrays(const std::vector<Vertex> &vertices,
+                          const Mat4 &model) {}
 
-  virtual void DrawElements() {}
+  virtual void DrawElements(const std::vector<Vertex> &vertices,
+                            const std::initializer_list<int32_t> &indices,
+                            const Mat4 &model) {}
 
   virtual void DrawLine(const std::vector<Vec2> &points) {}
 
 protected:
   Viewport m_Viewport;
   Ref<FrameBuffer> m_FrameBuffer;
+  Ref<Camera> m_Camera;
 };
 } // namespace Rasterization

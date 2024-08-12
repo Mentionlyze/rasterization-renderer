@@ -2,6 +2,7 @@
 
 #include "RendererInstance.hpp"
 #include <cstdint>
+#include <initializer_list>
 #include <vector>
 
 namespace Rasterization {
@@ -30,6 +31,11 @@ public:
   }
   inline static void BeginScene() {}
   inline static void EndScene() {}
+  inline static void Submit(const std::vector<Vertex> &vertices,
+                            const std::initializer_list<int32_t> &indices,
+                            const Mat4 &model) {
+    s_RendererInstance->DrawElements(vertices, indices, model);
+  }
   inline static void SubmitLine(const std::vector<Vec2> &points) {
     s_RendererInstance->DrawLine(points);
   }
