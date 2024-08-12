@@ -5,7 +5,11 @@
 
 namespace Rasterization {
 
-// RendererInstance *Renderer::s_RendererInstance = new CPU_Renderer();
-RendererInstance *Renderer::s_RendererInstance = new GPU_Renderer();
+#if USE_CPU_RENDERER
+RendererInstance *Renderer::s_RendererInstance = new CPU_Renderer();
+#endif
 
+#if USE_GPU_RENDERER
+RendererInstance *Renderer::s_RendererInstance = new GPU_Renderer();
+#endif
 } // namespace Rasterization

@@ -1,6 +1,5 @@
 #include "Triangle.hpp"
 #include "Runtime/Renderer.hpp"
-#include <iostream>
 
 Triangle::Triangle() : Layer("Triangle"), m_Radius(0.0f) {
   m_Vertices = {
