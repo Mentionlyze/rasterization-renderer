@@ -6,16 +6,31 @@ set(CMAKE_CXX_COMPILER clang++)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(TARGET "RASTERIZATION")
-
 project(
-  ${TARGET}
-  LANGUAGES C CXX
-  DESCRIPTION "a tiny renderer with rasterization by cpp"
-  VERSION 0.0.1
+  RASTERIZATION
+  LANGUAGES CXX
+ 
 )
 
+add_subdirectory(3rdlibs)
 add_subdirectory(Renderer)
 add_subdirectory(Sandbox)
 
-set_directory_properties(PROPERTY VS_STARTUP_PROJECT Sandbox)
+
+# file(GLOB_RECURSE IMAGE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Assets/*")
+
+# foreach(img in ${IMAGE_FILES})
+#   message(${img})
+# endforeach()
+
+
+# add_custom_target(copy_images ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR})
+
+# add_custom_command(
+#   OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/Assets
+  
+#   DEPENDS ${IMAGE_FILES}
+#   COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/Assets/images
+#   COMMAND ${CMAKE_COMMAND} -E copy_if_different ${IMAGE_FILES} ${CMAKE_CURRENT_BINARY_DIR}/Assets/images
+# )
+

@@ -1,5 +1,7 @@
 #include "Triangle.hpp"
+#include "Core/Texture.hpp"
 #include "Runtime/Renderer.hpp"
+#include <iostream>
 
 Triangle::Triangle() : Layer("Triangle"), m_Radius(0.0f) {
   m_Vertices = {
@@ -19,6 +21,13 @@ Triangle::Triangle() : Layer("Triangle"), m_Radius(0.0f) {
   //                                     {0.0f, 1.0f, 0.0f, 1.0f}},
   //               Rasterization::Vertex{Rasterization::Vec3{0.0f, -0.5f},
   //                                     {0.0f, 0.0f, 1.0f, 1.0f}}};
+
+  auto texture_Storage = Rasterization::TextureStorage{};
+  auto path = std::string{"/Assets/vue.jpg"};
+  auto path_result = path.c_str();
+  std::cout << path.c_str() << "\n";
+  auto id = texture_Storage.CreateTexture("Sandbox/vue.jpg");
+  std::cout << id << "\n";
 }
 
 void Triangle::OnUpdate() {
