@@ -1,6 +1,8 @@
-aux_source_directory(. sandbox_sources)
-file(GLOB_RECURSE sandbox_headers "./*.hpp")
 
-add_executable(Sandbox ${sandbox_sources})
-target_include_directories(Sandbox PRIVATE Include)
-target_link_libraries(Sandbox PRIVATE Renderer)
+
+# 获取当前源文件目录
+set(BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+message(${BASE_DIR})
+
+# 构造图片路径
+set(RESOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Assets")

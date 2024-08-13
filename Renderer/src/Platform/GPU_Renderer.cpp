@@ -8,76 +8,76 @@ GPU_Renderer::~GPU_Renderer() {}
 
 void GPU_Renderer::DrawArrays(const std::vector<Vertex> &vertices,
                               const Mat4 &model) {
-
-  auto len = vertices.size() / 3;
-  for (uint32_t i = 0; i < len; i++) {
-    Vertex result[3] = {vertices[i * 3], vertices[i * 3 + 1],
-                        vertices[i * 3 + 2]};
-    RasterizeTriangle(result, model);
-  }
+    auto len = vertices.size() / 3;
+    for (uint32_t i = 0; i < len; i++) {
+        Vertex result[3] = {vertices[i * 3], vertices[i * 3 + 1],
+                            vertices[i * 3 + 2]};
+        RasterizeTriangle(result, model);
+    }
 }
 
 void GPU_Renderer::DrawElements(const std::vector<Vertex> &vertices,
                                 const std::initializer_list<int32_t> &indices,
                                 const Mat4 &model) {
-  std::vector<Vertex> result;
+    std::vector<Vertex> result;
 
-  auto it = indices.begin();
-  while (it != indices.end()) {
-    result.push_back(vertices[*it]);
-    it++;
-  }
+    auto it = indices.begin();
+    while (it != indices.end()) {
+        result.push_back(vertices[*it]);
+        it++;
+    }
 
-  DrawArrays(result, model);
+    DrawArrays(result, model);
 }
 
 void GPU_Renderer::RasterizeTriangle(Vertex (&vertices)[3], const Mat4 &model) {
-  for (uint32_t i = 0; i < 3; i++) {
-    // mvp transform
-    auto mvp = m_Camera->GetPerspective() * m_Camera->GetViewMat() * model;
-    vertices[i].position = mvp * vertices[i].position;
+    for (uint32_t i = 0; i < 3; i++) {
+        // mvp transform
+        auto mvp = m_Camera->GetPerspective() * m_Camera->GetViewMat() * model;
+        vertices[i].position = mvp * vertices[i].position;
 
-    // perspective transfrom
-    vertices[i].position = 1 / vertices[i].position.w * vertices[i].position;
+        // perspective transfrom
+        vertices[i].position =
+            1 / vertices[i].position.w * vertices[i].position;
 
-    // viewport transform
-    vertices[i].position.x =
-        (vertices[i].position.x + 1.0f) * 0.5f * (m_Viewport.w - 1.0f) +
-        m_Viewport.x;
+        // viewport transform
+        vertices[i].position.x =
+            (vertices[i].position.x + 1.0f) * 0.5f * (m_Viewport.w - 1.0f) +
+            m_Viewport.x;
 
-    vertices[i].position.y =
-        m_Viewport.h -
-        (vertices[i].position.y + 1.0f) * 0.5f * (m_Viewport.h - 1.0f) +
-        m_Viewport.y;
-  }
+        vertices[i].position.y =
+            m_Viewport.h -
+            (vertices[i].position.y + 1.0f) * 0.5f * (m_Viewport.h - 1.0f) +
+            m_Viewport.y;
+    }
 
-  auto box = BoundingBox{vertices, m_Viewport};
-  // for (uint32_t x = box.min.x; x < box.max.x; x++) {
-  //   for (uint32_t y = box.min.y; y < box.max.y; y++) {
-  //     auto point = Vec2{(float)x, (float)y};
-  //     auto berycentric = Berycentric{point, vertices};
-  //     if (berycentric.Inside()) {
-  //       auto color = berycentric.GetAlpha() * vertices[0].color +
-  //                    berycentric.GetBeta() * vertices[1].color +
-  //                    berycentric.GetGamma() * vertices[2].color;
-  //       m_FrameBuffer->SetColor((uint32_t)x, (uint32_t)y, color);
-  //     }
-  //   }
+    auto box = BoundingBox{vertices, m_Viewport};
+    // for (uint32_t x = box.min.x; x < box.max.x; x++) {
+    //   for (uint32_t y = box.min.y; y < box.max.y; y++) {
+    //     auto point = Vec2{(float)x, (float)y};
+    //     auto berycentric = Berycentric{point, vertices};
+    //     if (berycentric.Inside()) {
+    //       auto color = berycentric.GetAlpha() * vertices[0].color +
+    //                    berycentric.GetBeta() * vertices[1].color +
+    //                    berycentric.GetGamma() * vertices[2].color;
+    //       m_FrameBuffer->SetColor((uint32_t)x, (uint32_t)y, color);
+    //     }
+    //   }
 
-  //   // std::cout << y << "\n";
-  // }
+    //   // std::cout << y << "\n";
+    // }
 
-  for (const Vec2 &point : box.points) {
-    auto berycentric = Berycentric{point, vertices};
-    if (!berycentric.Inside())
-      continue;
+    for (const Vec2 &point : box.points) {
+        auto berycentric = Berycentric{point, vertices};
+        if (!berycentric.Inside()) continue;
 
-    auto color = vertices[0].color * berycentric.GetAlpha() +
-                 vertices[1].color * berycentric.GetBeta() +
-                 vertices[2].color * berycentric.GetGamma();
-    m_FrameBuffer->SetColor((uint32_t)(point.x), (uint32_t)(point.y), color);
-  }
+        auto color = vertices[0].color * berycentric.GetAlpha() +
+                     vertices[1].color * berycentric.GetBeta() +
+                     vertices[2].color * berycentric.GetGamma();
+        m_FrameBuffer->SetColor((uint32_t)(point.x), (uint32_t)(point.y),
+                                color);
+    }
 }
 
 void GPU_Renderer::DrawLine(const std::vector<Vec2> &line) {}
-} // namespace Rasterization
+}  // namespace Rasterization

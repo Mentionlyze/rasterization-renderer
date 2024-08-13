@@ -4,11 +4,11 @@
 
 class Triangle : public Rasterization::Layer {
 public:
-  Triangle();
+    Triangle();
 
-  void OnUpdate() override;
+    void OnUpdate() override;
 
 private:
-  std::vector<Rasterization::Vertex> m_Vertices;
-  float m_Radius;
+    std::vector<Rasterization::Vertex> m_Vertices;
+    float m_Radius;
 };

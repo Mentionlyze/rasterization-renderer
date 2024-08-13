@@ -8,23 +8,23 @@
 namespace Rasterization {
 class Application {
 public:
-  Application(const std::string &title, const uint32_t width,
-              const uint32_t height);
-  ~Application();
+    Application(const std::string &title, const uint32_t width,
+                const uint32_t height);
+    ~Application();
 
-  void Run();
+    void Run();
 
-  void Terminate();
+    void Terminate();
 
-  void PushLayer(Layer *layer);
+    void PushLayer(Layer *layer);
 
 private:
-  std::string m_Title;
-  uint32_t m_Width, m_Height;
+    std::string m_Title;
+    uint32_t m_Width, m_Height;
 
-  Scope<Window> m_Window;
-  static Application *s_Instance;
+    Scope<Window> m_Window;
+    static Application *s_Instance;
 
-  LayerStack m_LayerStack;
+    LayerStack m_LayerStack;
 };
-} // namespace Rasterization
+}  // namespace Rasterization

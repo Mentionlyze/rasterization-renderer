@@ -12,4 +12,4 @@ RendererInstance *Renderer::s_RendererInstance = new CPU_Renderer();
 #if USE_GPU_RENDERER
 RendererInstance *Renderer::s_RendererInstance = new GPU_Renderer();
 #endif
-} // namespace Rasterization
+}  // namespace Rasterization

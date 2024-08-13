@@ -2,4 +2,4 @@
 
 namespace Rasterization {
 class Shader {};
-} // namespace Rasterization
+}  // namespace Rasterization

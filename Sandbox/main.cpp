@@ -6,11 +6,11 @@
 #define VIEWPORT_HEIGHT 900
 
 int main() {
-  auto app = new Rasterization::Application(VIEWPORT_TITLE, VIEWPORT_WIDTH,
-                                            VIEWPORT_HEIGHT);
+    auto app = new Rasterization::Application(VIEWPORT_TITLE, VIEWPORT_WIDTH,
+                                              VIEWPORT_HEIGHT);
 
-  app->PushLayer(new Triangle());
+    app->PushLayer(new Triangle());
 
-  app->Run();
-  delete app;
+    app->Run();
+    delete app;
 }

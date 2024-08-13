@@ -6,16 +6,25 @@ set(CMAKE_CXX_COMPILER clang++)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+
+
 project(
   RASTERIZATION
-  LANGUAGES CXX
- 
+  LANGUAGES CXX C
 )
 
 add_subdirectory(3rdlibs)
 add_subdirectory(Renderer)
-add_subdirectory(Sandbox)
 
+
+aux_source_directory(./Sandbox sandbox_sources)
+file(GLOB_RECURSE sandbox_headers "./Sandbox/*.hpp")
+
+add_executable(Rasterization ${sandbox_sources})
+target_include_directories(Rasterization PRIVATE Include)
+target_link_libraries(Rasterization PRIVATE Renderer)
+
+target_compile_definitions(Rasterization PRIVATE RESOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/Assets/")
 
 # file(GLOB_RECURSE IMAGE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Assets/*")
 
@@ -26,11 +35,9 @@ add_subdirectory(Sandbox)
 
 # add_custom_target(copy_images ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR})
 
-# add_custom_command(
-#   OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/Assets
-  
-#   DEPENDS ${IMAGE_FILES}
-#   COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/Assets/images
-#   COMMAND ${CMAKE_COMMAND} -E copy_if_different ${IMAGE_FILES} ${CMAKE_CURRENT_BINARY_DIR}/Assets/images
-# )
+add_custom_command(
+  TARGET Rasterization PRE_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Assets/ $<TARGET_FILE_DIR:Rasterization>/Assets/ 
+)
+
 
