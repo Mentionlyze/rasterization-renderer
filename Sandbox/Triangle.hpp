@@ -1,3 +1,4 @@
+#include "Core/Shader.hpp"
 #include "Core/Vertex.hpp"
 #include "Runtime/Layer.hpp"
 #include <vector>
@@ -11,4 +12,6 @@ public:
 private:
     std::vector<Rasterization::Vertex> m_Vertices;
     float m_Radius;
+    uint32_t m_Texture;
+    Rasterization::Ref<Rasterization::Shader> m_Shader;
 };
