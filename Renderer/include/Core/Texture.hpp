@@ -17,10 +17,11 @@ public:
     int32_t GetHeight() const { return m_height; }
 
     Color GetColor(const uint32_t x, const uint32_t y) const {
-        auto r = m_Buffer[y * m_Width * m_Channels + x * m_Channels + 0];
-        auto g = m_Buffer[y * m_Width * m_Channels + x * m_Channels + 1];
-        auto b = m_Buffer[y * m_Width * m_Channels + x * m_Channels + 2];
-        auto a = m_Channels == 4 ? m_Buffer[y * m_Width * m_Channels + x * m_Channels + 3] : (unsigned char)(255);
+        auto location = (y * m_Width + x) * m_Channels;
+        auto r = m_Buffer[location + 0];
+        auto g = m_Buffer[location + 1];
+        auto b = m_Buffer[location + 2];
+        auto a = m_Channels == 4 ? m_Buffer[location + 3] : (unsigned char)(255);
 
         return Color{UChar2Float(r), UChar2Float(g), UChar2Float(b), UChar2Float(a)};
     }
@@ -28,7 +29,7 @@ public:
 private:
     uint32_t m_TextureId;
     int32_t m_Width, m_height, m_Channels;
-    unsigned char* m_Buffer;
+    int32_t* m_Buffer;
 };
 
 class TextureStorage {

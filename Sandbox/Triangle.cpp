@@ -4,13 +4,16 @@
 
 Triangle::Triangle() : Layer("Triangle"), m_Radius(0.0f) {
     m_Vertices = {
-        Rasterization::Vertex{ Rasterization::Vec3{-0.5f, 0.5f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-        Rasterization::Vertex{  Rasterization::Vec3{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f, 1.0f}},
-        Rasterization::Vertex{Rasterization::Vec3{-0.5f, -0.5f}, {0.0f, 0.0f, 1.0f, 1.0f}},
-        Rasterization::Vertex{ Rasterization::Vec3{0.5f, -0.5f}, {1.0f, 1.0f, 0.0f, 1.0f}},
+        Rasterization::Vertex{ Rasterization::Vec3{-0.5f, 0.5f}, Rasterization::Vec2{0.0f, 1.0f}},
+        Rasterization::Vertex{  Rasterization::Vec3{0.5f, 0.5f}, Rasterization::Vec2{1.0f, 1.0f}},
+        Rasterization::Vertex{Rasterization::Vec3{-0.5f, -0.5f}, Rasterization::Vec2{0.0f, 0.0f}},
+        Rasterization::Vertex{ Rasterization::Vec3{0.5f, -0.5f}, Rasterization::Vec2{1.0f, 0.0f}},
     };
 
-    m_Texture = Rasterization::TextureStorage::CreateTexture("Assets/L04.png");
+    m_Texture = Rasterization::TextureStorage::CreateTexture("Assets/vue.jpg");
+
+    auto t = Rasterization::TextureStorage::GetTexture(m_Texture);
+    auto c = t->GetColor(100, 100);
 
     auto vertex_lamda = [this](Rasterization::Vertex &vertex, const Rasterization::Uniform &uniform) {
         auto perspective = uniform.mat4_Map.at("perspective");
@@ -25,7 +28,7 @@ Triangle::Triangle() : Layer("Triangle"), m_Radius(0.0f) {
     auto pixel_lamda = [this](Rasterization::Vertex &vertex, const Rasterization::Uniform &uniform) {
         auto texture = Rasterization::TextureStorage::GetTexture(m_Texture);
         auto color = Rasterization::TextureSample(texture, vertex.uv);
-        return color;
+        return vertex.color;
     };
 
     m_Shader = Rasterization::CreateRef<Rasterization::Shader>(vertex_lamda, pixel_lamda);

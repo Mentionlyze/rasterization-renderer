@@ -66,7 +66,9 @@ private:
 
 inline Color TextureSample(const Ref<Texture>& texture, const Vec2& uv) {
     auto x = uv.x * ((float)(texture->GetWidth()) - 1.0f);
-    auto y = uv.x * ((float)(texture->GetHeight()) - 1.0f);
+    auto y = uv.y * ((float)(texture->GetHeight()) - 1.0f);
+
+    ASSERT(x < texture->GetWidth() && y < texture->GetHeight());
 
     auto color = texture->GetColor((uint32_t)x, (uint32_t)y);
     return color;
