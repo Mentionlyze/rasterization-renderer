@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core/Camera.hpp"
+#include "Core/Shader.hpp"
 #include "Core/Vertex.hpp"
 #include "FrameBuffer.hpp"
 #include <cstdint>
@@ -35,14 +36,14 @@ public:
 
     Ref<FrameBuffer> GetFrameBuffer() { return m_FrameBuffer; }
 
+    Ref<Camera> GetCamera() { return m_Camera; }
+
     Viewport GetViewport() { return m_Viewport; }
 
-    virtual void DrawArrays(const std::vector<Vertex> &vertices,
-                            const Mat4 &model) {}
+    virtual void DrawArrays(const std::vector<Vertex> &vertices, const Ref<Shader> &shader) {}
 
-    virtual void DrawElements(const std::vector<Vertex> &vertices,
-                              const std::initializer_list<int32_t> &indices,
-                              const Mat4 &model) {}
+    virtual void DrawElements(const std::vector<Vertex> &vertices, const std::initializer_list<int32_t> &indices,
+                              const Ref<Shader> &shader) {}
 
     virtual void DrawLine(const std::vector<Vec2> &points) {}
 

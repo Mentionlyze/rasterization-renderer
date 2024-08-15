@@ -2,7 +2,7 @@
 #include "stb_image.h"
 
 namespace Rasterization {
-TextureStorage *TextureStorage::s_TextureStorageInstances = new TextureStorage();
+TextureStorage *TextureStorage::s_TextureStorageInstance = new TextureStorage();
 
 Texture::Texture(const std::string &path, const uint32_t id) {
     stbi_set_flip_vertically_on_load(1);
@@ -16,15 +16,15 @@ Texture::Texture(const std::string &path, const uint32_t id) {
 TextureStorage::TextureStorage() : m_CurId{0} {}
 
 uint32_t TextureStorage::CreateTexture(const std::string &path) {
-    auto id = s_TextureStorageInstances->m_CurId;
-    s_TextureStorageInstances->m_CurId++;
+    auto id = s_TextureStorageInstance->m_CurId;
+    s_TextureStorageInstance->m_CurId++;
 
-    s_TextureStorageInstances->m_Images[id] = CreateRef<Texture>(path, id);
+    s_TextureStorageInstance->m_Images[id] = CreateRef<Texture>(path, id);
     return id;
 }
 
 Ref<Texture> TextureStorage::GetTexture(const uint32_t id) {
-    auto texture = s_TextureStorageInstances->m_Images[id];
+    auto texture = s_TextureStorageInstance->m_Images[id];
     ASSERT(texture);
     return texture;
 }

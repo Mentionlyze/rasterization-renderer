@@ -12,16 +12,17 @@ public:
 
     ~Texture() = default;
 
+    int32_t GetWidth() const { return m_Width; }
+
+    int32_t GetHeight() const { return m_height; }
+
     Color GetColor(const uint32_t x, const uint32_t y) const {
         auto r = m_Buffer[y * m_Width * m_Channels + x * m_Channels + 0];
         auto g = m_Buffer[y * m_Width * m_Channels + x * m_Channels + 1];
         auto b = m_Buffer[y * m_Width * m_Channels + x * m_Channels + 2];
-        auto a = m_Channels == 4
-                     ? m_Buffer[y * m_Width * m_Channels + x * m_Channels + 3]
-                     : (unsigned char)(255);
+        auto a = m_Channels == 4 ? m_Buffer[y * m_Width * m_Channels + x * m_Channels + 3] : (unsigned char)(255);
 
-        return Color{UChar2Float(r), UChar2Float(g), UChar2Float(b),
-                     UChar2Float(a)};
+        return Color{UChar2Float(r), UChar2Float(g), UChar2Float(b), UChar2Float(a)};
     }
 
 private:
@@ -35,8 +36,8 @@ public:
     TextureStorage();
 
     ~TextureStorage() {
-        if (s_TextureStorageInstances != nullptr) {
-            delete s_TextureStorageInstances;
+        if (s_TextureStorageInstance != nullptr) {
+            delete s_TextureStorageInstance;
         }
     };
 
@@ -47,6 +48,6 @@ private:
     uint32_t m_CurId;
     std::unordered_map<uint32_t, Ref<Texture>> m_Images;
 
-    static TextureStorage* s_TextureStorageInstances;
+    static TextureStorage* s_TextureStorageInstance;
 };
 }  // namespace Rasterization
