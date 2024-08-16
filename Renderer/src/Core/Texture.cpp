@@ -6,14 +6,15 @@ TextureStorage *TextureStorage::s_TextureStorageInstance = new TextureStorage();
 
 Texture::Texture(const std::string &path, const uint32_t id) {
     stbi_set_flip_vertically_on_load(1);
-    auto data = stbi_load(path.c_str(), &m_Width, &m_height, &m_Channels, 0);
-    ASSERT(data);
-
-    m_Buffer = (unsigned char *)(data);
-    stbi_image_free(data);
+    m_Buffer = stbi_load(path.c_str(), &m_Width, &m_height, &m_Channels, 0);
+    ASSERT(m_Buffer);
 }
 
-TextureStorage::TextureStorage() : m_CurId{0} {}
+Texture::~Texture() {
+    stbi_image_free(m_Buffer);
+}
+
+TextureStorage::TextureStorage() : m_CurId{1} {}
 
 uint32_t TextureStorage::CreateTexture(const std::string &path) {
     auto id = s_TextureStorageInstance->m_CurId;

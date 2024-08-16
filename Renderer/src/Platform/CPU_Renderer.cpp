@@ -30,10 +30,8 @@ void CPU_Renderer::DrawElements(const std::vector<Vertex> &vertices, const std::
 
 void CPU_Renderer::RasterizeTriangle(Vertex (&vertices)[3], const Ref<Shader> &shader) {
     for (uint32_t i = 0; i < 3; i++) {
-        auto model = shader->GetMat4Uniform("model");
-        // mvp transform
-        auto mvp = m_Camera->GetPerspective() * m_Camera->GetViewMat() * model;
-        vertices[i].position = mvp * vertices[i].position;
+        // call vertex_changing
+        shader->CallVertexChanging(vertices[i]);
 
         // perspective transfrom
         vertices[i].position = 1 / vertices[i].position.w * vertices[i].position;
@@ -46,15 +44,15 @@ void CPU_Renderer::RasterizeTriangle(Vertex (&vertices)[3], const Ref<Shader> &s
     }
     auto [trap_1, trap_2] = Trapezoid::FromTriangle(vertices);
     if (trap_1) {
-        DrawTrapezoid(trap_1.value());
+        DrawTrapezoid(trap_1.value(), shader);
     }
 
     if (trap_2) {
-        DrawTrapezoid(trap_2.value());
+        DrawTrapezoid(trap_2.value(), shader);
     }
 }
 
-void CPU_Renderer::DrawTrapezoid(const Trapezoid &trap) {
+void CPU_Renderer::DrawTrapezoid(const Trapezoid &trap, const Ref<Shader> &shader) {
     auto top = (uint32_t)(std::max({std::ceil(trap.top), 0.0f}));
     auto bottom = (uint32_t)std::min({std::ceil(trap.bottom), (float)(m_Viewport.h)}) - 1;
 
@@ -62,19 +60,19 @@ void CPU_Renderer::DrawTrapezoid(const Trapezoid &trap) {
 
     while (y <= bottom) {
         auto scanline = Scanline::FromTrapzoid(trap, y);
-        DrawScanline(scanline);
+        DrawScanline(scanline, shader);
         y++;
     }
 }
 
-void CPU_Renderer::DrawScanline(const Scanline &scanline) {
+void CPU_Renderer::DrawScanline(const Scanline &scanline, const Ref<Shader> &shader) {
     auto t_Scanline = scanline;
     auto vertex = t_Scanline.vertex;
     auto y = t_Scanline.y;
 
     while (t_Scanline.width > 0.0f) {
         auto x = vertex.position.x;
-        auto color = vertex.color;
+        auto color = shader->CallPixelShading(vertex);
         if (x >= 0.0f && x < (float)(m_Viewport.w - 1)) {
             m_FrameBuffer->SetColor((uint32_t)x, (uint32_t)y, color);
         }
@@ -82,6 +80,8 @@ void CPU_Renderer::DrawScanline(const Scanline &scanline) {
         t_Scanline.width -= 1.0f;
         vertex.position += t_Scanline.step.position;
         vertex.color += t_Scanline.step.color;
+        vertex.uv += t_Scanline.step.uv;
+        vertex.normal += t_Scanline.step.normal;
     }
 }
 

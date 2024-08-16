@@ -17,8 +17,8 @@ public:
 
 private:
     void RasterizeTriangle(Vertex (&vertices)[3], const Ref<Shader> &shader);
-    void DrawTrapezoid(const Trapezoid &trap);
-    void DrawScanline(const Scanline &scanline);
+    void DrawTrapezoid(const Trapezoid &trap, const Ref<Shader> &shader);
+    void DrawScanline(const Scanline &scanline, const Ref<Shader> &shader);
     void DrawLineWithClip();
 };
 }  // namespace Rasterization

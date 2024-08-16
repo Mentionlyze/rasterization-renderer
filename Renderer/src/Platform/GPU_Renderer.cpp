@@ -29,10 +29,9 @@ void GPU_Renderer::DrawElements(const std::vector<Vertex> &vertices, const std::
 }
 
 void GPU_Renderer::RasterizeTriangle(Vertex (&vertices)[3], const Ref<Shader> &shader) {
-    auto uniform = shader->GetUniform();
     for (uint32_t i = 0; i < 3; i++) {
         // vertex_change
-        shader->CallVertexChanging(vertices[i], uniform);
+        shader->CallVertexChanging(vertices[i]);
 
         // perspective transfrom
         vertices[i].position = 1 / vertices[i].position.w * vertices[i].position;
@@ -65,7 +64,7 @@ void GPU_Renderer::RasterizeTriangle(Vertex (&vertices)[3], const Ref<Shader> &s
         if (!berycentric.Inside()) continue;
         auto vertex = GetBerycentricFilteredVertex(vertices, berycentric);
 
-        auto color = shader->CallPixelShading(vertex, uniform);
+        auto color = shader->CallPixelShading(vertex);
 
         m_FrameBuffer->SetColor((uint32_t)(point.x), (uint32_t)(point.y), color);
     }

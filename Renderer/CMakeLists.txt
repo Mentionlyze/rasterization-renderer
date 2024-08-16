@@ -11,5 +11,5 @@ add_library(Renderer ${renderer_core_sources} ${renderer_runtime_sources} ${rend
 target_include_directories(Renderer PUBLIC ./include)
 set_target_properties(Renderer PROPERTIES PUBLIC_HEADER "${renderer_headers}")
 target_link_libraries(Renderer PUBLIC stb_image)
-target_compile_definitions(Renderer PRIVATE USE_CPU_RENDERER=0)
-target_compile_definitions(Renderer PRIVATE USE_GPU_RENDERER=1)
+target_compile_definitions(Renderer PRIVATE USE_CPU_RENDERER=1)
+target_compile_definitions(Renderer PRIVATE USE_GPU_RENDERER=0)

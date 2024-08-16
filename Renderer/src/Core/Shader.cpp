@@ -8,11 +8,11 @@ Shader::Shader(const std::function<Vertex(Vertex& vertex, const Uniform& uniform
     m_Uniform = Uniform{};
 }
 
-Vertex Shader::CallVertexChanging(Vertex& vertex, const Uniform& uniform) {
-    return m_VertexLamda(vertex, uniform);
+Vertex Shader::CallVertexChanging(Vertex& vertex) {
+    return m_VertexLamda(vertex, m_Uniform);
 }
 
-Color Shader::CallPixelShading(Vertex& vertex, const Uniform& uniform) {
-    return m_PixelLamda(vertex, uniform);
+Color Shader::CallPixelShading(Vertex& vertex) {
+    return m_PixelLamda(vertex, m_Uniform);
 }
 }  // namespace Rasterization

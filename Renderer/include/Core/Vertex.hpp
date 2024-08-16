@@ -18,6 +18,9 @@ struct Vertex {
     Vertex(const Vec3 &pos, const Color &color)
       : position{Vec4{pos, 1.0f}}, color{color}, uv{Vec2{}}, normal{Vec4{}} {};
 
+    Vertex(const Vec3 &pos, const Color &color, const Vec2& uv)
+      : position{Vec4{pos, 1.0f}}, color{color}, uv{uv}, normal{Vec4{}} {};
+
     Vertex(const Vec3 &pos, const Vec2 &uv)
       : position{Vec4{pos, 1.0f}}, color{Color{}}, uv{uv}, normal{Vec4{}} {};
 
