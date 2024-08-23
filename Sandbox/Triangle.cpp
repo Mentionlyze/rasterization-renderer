@@ -52,5 +52,5 @@ void Triangle::OnUpdate() {
 
     Rasterization::Renderer::Submit(m_Vertices, indices, m_Shader);
 
-    m_Radius += 0.01;
+    m_Radius += 0.05;
 }

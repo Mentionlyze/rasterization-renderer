@@ -1,6 +1,5 @@
 #include "Platform/GPU_Renderer.hpp"
 #include "Core/Berycentric.hpp"
-#include "Core/Texture.hpp"
 
 namespace Rasterization {
 GPU_Renderer::GPU_Renderer() {}
@@ -33,8 +32,13 @@ void GPU_Renderer::RasterizeTriangle(Vertex (&vertices)[3], const Ref<Shader> &s
         // vertex_change
         shader->CallVertexChanging(vertices[i]);
 
+        // save true z
+        vertices[i].position.z = -(vertices[i].position.w);
+
         // perspective transfrom
-        vertices[i].position = 1 / vertices[i].position.w * vertices[i].position;
+        vertices[i].position.x = 1 / vertices[i].position.w * vertices[i].position.x;
+        vertices[i].position.y = 1 / vertices[i].position.w * vertices[i].position.y;
+        vertices[i].position.w = 1.0f;
 
         // viewport transform
         vertices[i].position.x = (vertices[i].position.x + 1.0f) * 0.5f * (m_Viewport.w - 1.0f) + m_Viewport.x;
@@ -62,7 +66,14 @@ void GPU_Renderer::RasterizeTriangle(Vertex (&vertices)[3], const Ref<Shader> &s
     for (const Vec2 &point : box.points) {
         auto berycentric = Berycentric{point, vertices};
         if (!berycentric.Inside()) continue;
-        auto vertex = GetBerycentricFilteredVertex(vertices, berycentric);
+
+        auto berycentric_Z = berycentric.GetAlpha() / vertices[0].position.z +
+                             berycentric.GetBeta() / vertices[1].position.z +
+                             berycentric.GetGamma() / vertices[2].position.z;
+
+        auto z = 1.0f / berycentric_Z;
+
+        auto vertex = GetBerycentricFilteredVertex(z, vertices, berycentric);
 
         auto color = shader->CallPixelShading(vertex);
 
@@ -72,18 +83,27 @@ void GPU_Renderer::RasterizeTriangle(Vertex (&vertices)[3], const Ref<Shader> &s
 
 void GPU_Renderer::DrawLine(const std::vector<Vec2> &line) {}
 
-Vertex GPU_Renderer::GetBerycentricFilteredVertex(Vertex (&vertices)[3], const Berycentric &berycentric) {
-    auto position = vertices[0].position * berycentric.GetAlpha() + vertices[1].position * berycentric.GetBeta() +
-                    vertices[2].position * berycentric.GetGamma();
+Vertex GPU_Renderer::GetBerycentricFilteredVertex(const float z, Vertex (&vertices)[3],
+                                                  const Berycentric &berycentric) {
+    auto z1 = 1.0f / vertices[0].position.z;
+    auto z2 = 1.0f / vertices[1].position.z;
+    auto z3 = 1.0f / vertices[2].position.z;
 
-    auto color = vertices[0].color * berycentric.GetAlpha() + vertices[1].color * berycentric.GetBeta() +
-                 vertices[2].color * berycentric.GetGamma();
+    auto position =
+        (vertices[0].position * berycentric.GetAlpha() * z1 + vertices[1].position * berycentric.GetBeta() * z2 +
+         vertices[2].position * berycentric.GetGamma() * z3) *
+        z;
 
-    auto uv = vertices[0].uv * berycentric.GetAlpha() + vertices[1].uv * berycentric.GetBeta() +
-              vertices[2].uv * berycentric.GetGamma();
+    auto color = (vertices[0].color * berycentric.GetAlpha() * z1 + vertices[1].color * berycentric.GetBeta() * z2 +
+                  vertices[2].color * berycentric.GetGamma() * z3) *
+                 z;
 
-    auto normal = vertices[0].normal * berycentric.GetAlpha() + vertices[1].normal * berycentric.GetBeta() +
-                  vertices[2].normal * berycentric.GetGamma();
+    auto uv = (vertices[0].uv * berycentric.GetAlpha() * z1 + vertices[1].uv * berycentric.GetBeta() * z2 +
+               vertices[2].uv * berycentric.GetGamma() * z3) *
+              z;
+
+    auto normal = (vertices[0].normal * berycentric.GetAlpha() * z1 + vertices[1].normal * berycentric.GetBeta() * z2 +
+                   vertices[2].normal * berycentric.GetGamma() * z3);
 
     return Vertex{position, color, uv, normal};
 }

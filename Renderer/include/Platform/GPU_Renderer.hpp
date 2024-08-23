@@ -51,6 +51,6 @@ public:
 
 private:
     void RasterizeTriangle(Vertex (&vertices)[3], const Ref<Shader> &shader);
-    Vertex GetBerycentricFilteredVertex(Vertex (&vertices)[3], const Berycentric &berycentric);
+    Vertex GetBerycentricFilteredVertex(const float z, Vertex (&vertices)[3], const Berycentric &berycentric);
 };
 }  // namespace Rasterization
